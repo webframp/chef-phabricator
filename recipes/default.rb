@@ -28,19 +28,19 @@ node['phabricator']['packages'].each do |pkg|
     package pkg
 end
 
-# user to own the checked out files
 install_user = node['phabricator']['user']
-# dir where phabricator and deps are installed
 install_dir = node['phabricator']['install_dir']
-# phabricator dir, used too often, so create local variable
 phabricator_dir = "#{install_dir}/phabricator"
 
+user install_user
+directory install_dir
+
 # checkout code
-packages = %w{phabricator libphutil arcanist}
-packages.each do |pkg|
-    git "#{install_dir}/#{pkg}" do
+repos = %w{phabricator libphutil arcanist}
+repos.each do |repo|
+    git "#{install_dir}/#{repo}" do
         user install_user
-        repository "git://github.com/facebook/#{pkg}.git"
+        repository "git://github.com/facebook/#{repo}.git"
         reference "master"
         action :checkout
     end
@@ -104,8 +104,6 @@ template "/etc/nginx/sites-available/phabricator" do
     notifies :reload, "service[nginx]"
 end
 
-link "Enable Phabricator for nginx" do
-    to "../sites-available/phabricator"
-    target_file "/etc/nginx/sites-enabled/phabricator"
-    notifies :reload, "service[nginx]"
+nginx_site "phabricator" do
+  action :enable
 end
