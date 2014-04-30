@@ -5,9 +5,9 @@ default['phabricator']['password'] = 'root'
 default['phabricator']['domain'] = 'phabricator.dev'
 
 # user to own the checked out files
-default['phabricator']['user'] = 'vagrant'
+default['phabricator']['user'] = 'phabricator'
 # dir where phabricator and deps are installed
-default['phabricator']['install_dir'] = '/home/vagrant'
+default['phabricator']['install_dir'] = '/home/phabricator'
 
 # ngix service name, maybe different on platforms
 default['phabricator']['nginx']['service'] = 'nginx'
