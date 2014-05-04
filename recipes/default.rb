@@ -23,87 +23,42 @@
 ## THE SOFTWARE.
 ##
 
-# Install optional packages
-node['phabricator']['packages'].each do |pkg|
-    package pkg
-end
+# setup order:
+# install (local user and clone code)
+# database (sql server and storage update)
+# config (phab config and storage update?)
+# web (nginx)
+# phabricator admin user
+# phabricator ldap auth (?)
 
-install_user = node['phabricator']['user']
-install_dir = node['phabricator']['install_dir']
+include_recipe "git"
+include_recipe "php"
+include_recipe "php-fpm"
+
+local_account= node['phabricator']['user']
+install_dir = node['phabricator']['directory']
 phabricator_dir = "#{install_dir}/phabricator"
 
-user install_user
-directory install_dir
+user local_account do
+  supports :manage_home => true
+  home install_dir
+end
 
-# checkout code
+group local_account
+
 repos = %w{phabricator libphutil arcanist}
 repos.each do |repo|
-    git "#{install_dir}/#{repo}" do
-        user install_user
-        repository "git://github.com/facebook/#{repo}.git"
-        reference "master"
-        action :checkout
-    end
+  git "#{install_dir}/#{repo}" do
+    user local_account
+    group local_account
+    repository "http://github.com/facebook/#{repo}"
+    reference "master"
+    action :checkout
+  end
 end
 
-template "Configure Phabricator" do
-    path "#{phabricator_dir}/conf/local/local.json"
-    source "local.json.erb"
-    user install_user
-    mode 0644
-    variables ({ :config => node['phabricator']['config'] })
-    notifies :run, "bash[Upgrade Phabricator storage]", :immediately
-end
+#include_recipe "phabricator::database"
 
-bash "Upgrade Phabricator storage" do
-    user install_user
-    cwd phabricator_dir
-    code "./bin/storage upgrade --force"
-    action :nothing
-    notifies :create, "template[Create admin script]", :immediately
-end
-
-# Install custom script to easily install an admin user
-template "Create admin script" do
-    path "#{phabricator_dir}/scripts/user/admin.php"
-    source "account.erb"
-    user install_user
-    mode 0755
-    action :nothing
-    notifies :run, "bash[Install admin account]", :immediately
-end
-
-bash "Install admin account" do
-    user install_user
-    cwd "#{phabricator_dir}/scripts/user"
-    code "./admin.php"
-    action :nothing
-    notifies :delete, "file[Remove admin script]", :immediately
-end
-
-file "Remove admin script" do
-    path "#{phabricator_dir}/scripts/user/admin.php"
-    action :nothing
-end
-
-# just to be sure dirs exist
-directory "/etc/nginx/sites-available"
-directory "/etc/nginx/sites-enabled"
-
-# enable and start, will reload if symlink is created or config updated
-service "nginx" do
-    service_name node['phabricator']['nginx']['service']
-    action [:enable, :start]
-end
-
-# Set nginx dependencies.
-template "/etc/nginx/sites-available/phabricator" do
-    source "nginx.erb"
-    variables ({ :phabricator_dir => phabricator_dir })
-    mode 0644
-    notifies :reload, "service[nginx]"
-end
-
-nginx_site "phabricator" do
-  action :enable
+file "#{phabricator_dir}/conf/local/local.json" do
+  content node['phabricator']['config'].to_json
 end
