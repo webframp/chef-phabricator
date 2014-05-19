@@ -33,32 +33,15 @@
 
 include_recipe "git"
 include_recipe "php"
+include_recipe "php::module_mysql"
+include_recipe "php::module_curl"
+include_recipe "php::module_ldap"
+include_recipe "php::module_apc"
 include_recipe "php-fpm"
 
-local_account= node['phabricator']['user']
-install_dir = node['phabricator']['directory']
-phabricator_dir = "#{install_dir}/phabricator"
+include_recipe "phabricator::user"
+include_recipe "phabricator::code"
 
-user local_account do
-  supports :manage_home => true
-  home install_dir
-end
-
-group local_account
-
-repos = %w{phabricator libphutil arcanist}
-repos.each do |repo|
-  git "#{install_dir}/#{repo}" do
-    user local_account
-    group local_account
-    repository "http://github.com/facebook/#{repo}"
-    reference "master"
-    action :checkout
-  end
-end
-
-#include_recipe "phabricator::database"
-
-file "#{phabricator_dir}/conf/local/local.json" do
-  content node['phabricator']['config'].to_json
-end
+include_recipe "phabricator::database"
+include_recipe "phabricator::setup"
+include_recipe "phabricator::web"
