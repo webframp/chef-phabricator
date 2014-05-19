@@ -22,18 +22,6 @@ default['phabricator']['config'] = {
     # mysql connection params
     'mysql.host' => 'localhost',
     'mysql.port' => 3306,
-    'mysql.user' => value_for_platform_family(
-        'pld' => 'mysql',
-        'default' => 'root',
-    ),
+    'mysql.user' => 'root',
     'mysql.pass' => '',
 }
-
-# packages to install before proceeding, php, nginx, etc
-# Platform specific packages
-case node['platform_family']
-when 'pld'
-  default['phabricator']['packages'] = %w{git-core php-program php-spl php-mysql php-json php-filter php-hash php-openssl php-mbstring php-iconv php-curl php-fileinfo php-pecl-APC php-gd}
-else
-  default['phabricator']['packages'] = %w{}
-end
