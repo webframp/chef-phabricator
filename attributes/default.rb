@@ -4,10 +4,8 @@ default['phabricator']['password'] = 'root'
 
 default['phabricator']['domain'] = 'phabricator.dev'
 
-# user to own the checked out files
 default['phabricator']['user'] = 'phabricator'
 default['phabricator']['db_user'] = 'root'
-# dir where phabricator and deps are installed
 default['phabricator']['directory'] = '/home/phabricator'
 
 # ngix service name, maybe different on platforms
