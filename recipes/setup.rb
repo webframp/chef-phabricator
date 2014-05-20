@@ -19,8 +19,11 @@ file "#{phabricator_dir}/conf/local/local.json" do
   content lazy { node['phabricator']['config'].to_json }
 end
 
+mysql_user = node['phabricator']['db_user']
+mysql_pass = node['mysql']['server_root_password']
+
 bash "Upgrade Phabricator storage" do
-    user install_user
-    cwd phabricator_dir
-    code "./bin/storage upgrade --force"
+  user install_user
+  cwd phabricator_dir
+  code "./bin/storage upgrade --force --user #{mysql_user} --password #{mysql_pass}"
 end
