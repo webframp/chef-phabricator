@@ -16,9 +16,6 @@ phabricator_dir = "#{node['phabricator']['directory']}/phabricator"
 
 include_recipe "nginx"
 
-#directory "/etc/nginx/sites-available"
-#directory "/etc/nginx/sites-enabled"
-
 service "nginx" do
     action [:enable]
 end
