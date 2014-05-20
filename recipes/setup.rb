@@ -16,7 +16,7 @@ install_user= node['phabricator']['user']
 phabricator_dir = "#{node['phabricator']['directory']}/phabricator"
 
 file "#{phabricator_dir}/conf/local/local.json" do
-  content node['phabricator']['config'].to_json
+  content lazy { node['phabricator']['config'].to_json }
 end
 
 bash "Upgrade Phabricator storage" do
