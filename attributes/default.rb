@@ -8,9 +8,6 @@ default['phabricator']['user'] = 'phabricator'
 default['phabricator']['db_user'] = 'root'
 default['phabricator']['directory'] = '/home/phabricator'
 
-# ngix service name, maybe different on platforms
-default['phabricator']['nginx']['service'] = 'nginx'
-
 # phabricator config saved into conf/local/local.json
 # see ./bin/config list for available configuration
 default['phabricator']['config'] = {

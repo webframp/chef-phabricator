@@ -20,7 +20,6 @@ include_recipe "nginx"
 #directory "/etc/nginx/sites-enabled"
 
 service "nginx" do
-    service_name node['phabricator']['nginx']['service']
     action [:enable]
 end
 
