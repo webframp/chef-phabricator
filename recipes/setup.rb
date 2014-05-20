@@ -24,23 +24,3 @@ bash "Upgrade Phabricator storage" do
     cwd phabricator_dir
     code "./bin/storage upgrade --force"
 end
-
-# FIX none of this junk is can be run more than once
-# # Install custom script to easily install an admin user
-# template "Create admin script" do
-#     path "#{phabricator_dir}/scripts/user/admin.php"
-#     source "account.erb"
-#     user install_user
-#     mode 0755
-# end
-
-# bash "Install admin account" do
-#     user install_user
-#     cwd "#{phabricator_dir}/scripts/user"
-#     code "./admin.php"
-# end
-
-# file "Remove admin script" do
-#     path "#{phabricator_dir}/scripts/user/admin.php"
-#     action :delete
-# end
