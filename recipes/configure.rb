@@ -16,7 +16,7 @@
 # limitations under the License.
 
 install_user= node['phabricator']['user']
-phabricator_dir = "#{node['phabricator']['directory']}/phabricator"
+phabricator_install = "#{node['phabricator']['directory']}/phabricator"
 
 file "#{node['phabricator']['php_conf_d']}/apc.stat.ini" do
   content "apc.stat=0\n"
@@ -27,7 +27,7 @@ directory node['phabricator']['config']['repository.default-local-path'] do
   group node['nginx']['user']
 end
 
-file "#{phabricator_dir}/conf/local/local.json" do
+file "#{phabricator_install}/conf/local/local.json" do
   owner install_user
   group install_user
   content lazy { JSON.pretty_generate(node['phabricator']['config']) }
