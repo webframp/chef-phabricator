@@ -40,6 +40,7 @@ include_recipe "php::module_curl"
 include_recipe "php::module_ldap"
 include_recipe "php::module_apc"
 include_recipe "php-fpm"
+include_recipe "runit"
 
 include_recipe "phabricator::user"
 include_recipe "phabricator::code"

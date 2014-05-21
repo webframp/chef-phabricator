@@ -1,0 +1,8 @@
+#!/bin/sh
+user="<%= @options[:user] %>"
+phd="<%= @options[:phd_path] %>"
+
+exec 2>&1
+exec chpst \
+     -u $user \
+     $phd stop

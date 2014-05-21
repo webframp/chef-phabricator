@@ -36,3 +36,13 @@ bash "Upgrade Phabricator storage" do
   cwd phabricator_dir
   code "./bin/storage upgrade --force --user #{mysql_user} --password #{mysql_pass}"
 end
+
+runit_service "phd" do
+  log false
+  check true
+  finish true
+  options(
+    user: node['phabricator']['user'],
+    phd_path: "#{node['phabricator']['directory']}/phabricator/bin/phd"
+  )
+end
