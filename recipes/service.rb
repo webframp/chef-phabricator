@@ -1,5 +1,5 @@
 # Cookbook Name:: phabricator
-# Recipe:: web
+# Recipe:: service
 
 # Copyright (C) 2014  Sean Escriva
 
@@ -15,25 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-phabricator_dir = "#{node['phabricator']['directory']}/phabricator"
-
-include_recipe "nginx"
-
-service "nginx" do
-    action [:enable]
-end
-
-template "/etc/nginx/sites-available/phabricator" do
-    source "nginx.erb"
-    variables ({ :phabricator_dir => phabricator_dir })
-    mode 0644
-    notifies :reload, "service[nginx]"
-end
-
-service "php-fpm" do
-  action :restart
-end
-
-nginx_site "phabricator" do
-  action :enable
+runit_service "phd" do
+  log false
+  check true
+  finish true
+  options(
+    user: node['phabricator']['user'],
+    phd_path: "#{node['phabricator']['directory']}/phabricator/bin/phd"
+  )
 end
