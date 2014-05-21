@@ -24,6 +24,10 @@ file "#{phabricator_dir}/conf/local/local.json" do
   content lazy { node['phabricator']['config'].to_json }
 end
 
+file "#{node['phabricator']['php_conf_d']}/apc.stat.ini" do
+  content "apc.stat=0\n"
+end
+
 mysql_user = node['phabricator']['db_user']
 mysql_pass = node['mysql']['server_root_password']
 
