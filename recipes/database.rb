@@ -45,7 +45,6 @@ mysql_user = node['phabricator']['db_user']
 mysql_pass = node['mysql']['server_root_password']
 
 bash "Upgrade Phabricator storage" do
-  user install_user
-  cwd phabricator_dir
+  cwd "#{node['phabricator']['directory']}/phabricator"
   code "./bin/storage upgrade --force --user #{mysql_user} --password #{mysql_pass}"
 end
