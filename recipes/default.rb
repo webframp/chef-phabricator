@@ -32,7 +32,6 @@
 # phabricator ldap auth (?)
 
 include_recipe "git"
-include_recipe "postfix"
 include_recipe "php"
 include_recipe "php::module_gd"
 include_recipe "php::module_mysql"
