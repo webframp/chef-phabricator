@@ -16,6 +16,7 @@ default['phabricator']['config'] = {
     'environment.append-paths' => ['/usr/bin', '/usr/local/bin'],
     # TODO: fix port
     'phabricator.base-uri' => 'http://phabricator.dev:4567',
+    'phabricator.timezone' => 'America/New_York',
     'repository.default-local-path' => '/var/repo',
     'storage.upload-size-limit' => '10M',
 
