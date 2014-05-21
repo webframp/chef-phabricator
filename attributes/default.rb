@@ -7,6 +7,7 @@ default['phabricator']['domain'] = 'phabricator.dev'
 default['phabricator']['user'] = 'phabricator'
 default['phabricator']['db_user'] = 'root'
 default['phabricator']['directory'] = '/home/phabricator'
+default['phabricator']['mysql_conf_d'] = '/etc/mysql/conf.d'
 
 # phabricator config saved into conf/local/local.json
 # see ./bin/config list for available configuration
@@ -17,7 +18,7 @@ default['phabricator']['config'] = {
 
     # mysql connection params
     'mysql.host' => 'localhost',
-    'mysql.port' => 3306,
+    'mysql.port' => '3306',
     'mysql.user' => 'root',
     'mysql.pass' => '',
 }
