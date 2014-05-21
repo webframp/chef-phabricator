@@ -15,6 +15,11 @@
 install_user= node['phabricator']['user']
 phabricator_dir = "#{node['phabricator']['directory']}/phabricator"
 
+directory node['phabricator']['config']['repository.default-local-path'] do
+  user node['nginx']['user']
+  group node['nginx']['user']
+end
+
 file "#{phabricator_dir}/conf/local/local.json" do
   content lazy { node['phabricator']['config'].to_json }
 end

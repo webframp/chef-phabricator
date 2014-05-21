@@ -15,6 +15,7 @@ default['phabricator']['config'] = {
     'environment.append-paths' => ['/usr/bin', '/usr/local/bin'],
     # TODO: fix port
     'phabricator.base-uri' => 'http://phabricator.dev:4567',
+    'repository.default-local-path' => '/var/repo',
 
     # mysql connection params
     'mysql.host' => 'localhost',
